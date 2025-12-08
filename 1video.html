@@ -3,37 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Видео-Загадка №...</title>
+    <title>Видео</title>
     <style>
-        /* Базовые стили */
+        /* Сброс стилей */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none; /* Запрет выделения текста */
-            -webkit-user-select: none; /* Для Safari */
-            -moz-user-select: none; /* Для Firefox */
-            -ms-user-select: none; /* Для IE/Edge */
+            -webkit-touch-callout: none; /* Отключаем вызов меню на iOS */
+            -webkit-user-select: none; /* Отключаем выделение на iOS/Safari */
+            -khtml-user-select: none; /* Отключаем выделение на Konqueror */
+            -moz-user-select: none; /* Отключаем выделение на Firefox */
+            -ms-user-select: none; /* Отключаем выделение на IE/Edge */
+            user-select: none; /* Отключаем выделение */
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             
-            /* 1. ФОН - замените на свою картинку */
-            background: #000; /* Черный фон по умолчанию */
-            /* background: url('your-image.jpg') center/cover no-repeat fixed; */
+            /* 1. ЗДЕСЬ УСТАНАВЛИВАЕТСЯ ФОНОВАЯ КАРТИНКА */
+            /* Чтобы добавить свою картинку, замените url() на путь к вашему изображению */
+            /* Пример: background: url('https://example.com/your-image.jpg') center/cover no-repeat; */
             
+            background: #000; /* Простой черный фон по умолчанию */
             color: #fff;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            overflow: hidden; /* Запрет прокрутки */
-            position: relative;
+            overflow-x: hidden;
+            cursor: default; /* Убираем указатель для выделения текста */
         }
 
-        /* Затемнение фона */
+        /* Затемнение фона для лучшей читаемости текста */
         body::before {
             content: '';
             position: fixed;
@@ -41,395 +45,394 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.8); /* Более темный оверлей */
             z-index: -1;
         }
 
-        /* Контейнер видео */
-        .video-container {
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            pointer-events: none; /* Запрещаем взаимодействие с заголовком */
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Контейнер для видео с дополнительной защитой */
+        .video-wrapper {
             position: relative;
             width: 100%;
             max-width: 900px;
+            margin: 0 auto;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Соотношение сторон 16:9 */
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
             background: #000;
+            /* Запрещаем все pointer-events, но разрешаем для iframe */
+            pointer-events: none;
         }
 
-        /* Iframe с видео */
+        /* Разрешаем события только для iframe */
         .video-wrapper iframe {
+            pointer-events: auto;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 соотношение сторон */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             border: none;
-            pointer-events: auto;
+            background-color: #000;
         }
 
-        /* Оверлей с иконкой play */
-        .play-overlay {
+        /* Индикатор загрузки */
+        .loading {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: all 0.3s;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .play-overlay:hover {
-            background: rgba(0, 0, 0, 0.9);
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-
-        .play-overlay svg {
-            width: 30px;
-            height: 30px;
-            margin-left: 5px; /* Смещение для треугольной иконки */
-        }
-
-        /* Скрываем оверлей после клика */
-        .play-overlay.hidden {
-            opacity: 0;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 25px;
+            border-radius: 10px;
             pointer-events: none;
         }
 
-        /* Блокирующий слой для предотвращения взаимодействия с iframe */
-        .iframe-blocker {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-            display: none;
-        }
-
-        /* Блокировка правого клика */
-        .context-menu-blocker {
+        /* Оверлей для защиты от кликов */
+        .protection-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1000;
-            display: none;
+            z-index: 9999;
+            pointer-events: auto; /* Перехватывает все клики */
+            /* Прозрачный, невидимый */
+            background: transparent;
         }
 
-        /* Адаптивность */
+        /* Адаптивность для мобильных */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
             }
             
-            .play-overlay {
-                width: 70px;
-                height: 70px;
+            .header h1 {
+                font-size: 1.5rem;
             }
             
-            .play-overlay svg {
-                width: 25px;
-                height: 25px;
+            .header p {
+                font-size: 0.9rem;
+                padding: 0 10px;
+            }
+            
+            .video-wrapper {
+                border-radius: 8px;
             }
         }
 
-        @media (max-width: 480px) {
-            .play-overlay {
-                width: 60px;
-                height: 60px;
+        /* Анимация появления */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            
-            .play-overlay svg {
-                width: 20px;
-                height: 20px;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
+        }
+
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Сообщение о запрете */
+        .warning-message {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            opacity: 0.5;
+            font-style: italic;
+            pointer-events: none;
+        }
+
+        /* Скрытый контейнер для маскировки URL */
+        .url-mask {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <!-- Блокировщик контекстного меню -->
-    <div class="context-menu-blocker" id="contextBlocker"></div>
+    <!-- Защитный оверлей -->
+    <div class="protection-overlay" id="protectionOverlay"></div>
     
-    <!-- Основной контейнер -->
-    <div class="video-container">
+    <div class="container">
+        <div class="header">
+            <h1>Видео</h1>
+            <p>Нажмите на видео для начала воспроизведения</p>
+        </div>
+        
         <div class="video-wrapper">
-            <!-- Блокирующий слой -->
-            <div class="iframe-blocker" id="iframeBlocker"></div>
-            
-            <!-- Оверлей для запуска -->
-            <div class="play-overlay" id="playOverlay">
-                <svg viewBox="0 0 24 24" fill="white">
-                    <path d="M8 5v14l11-7z"/>
-                </svg>
+            <div class="video-container">
+                <!-- Индикатор загрузки -->
+                <div class="loading" id="loadingIndicator">
+                    Загрузка видео...
+                </div>
+                
+                <!-- Видео с VK -->
+                <!-- Используем прокси для маскировки исходного URL -->
+                <iframe 
+                    src="" 
+                    allow="encrypted-media; fullscreen; picture-in-picture;" 
+                    frameborder="0" 
+                    allowfullscreen
+                    id="videoFrame"
+                    sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
+                    referrerpolicy="no-referrer"
+                    loading="eager">
+                </iframe>
             </div>
-            
-            <!-- Iframe будет создан динамически -->
-            <div id="videoPlaceholder"></div>
+        </div>
+        
+        <div class="warning-message">
+            Контент защищен от копирования
+        </div>
+        
+        <!-- Скрытые элементы для маскировки -->
+        <div class="url-mask">
+            <iframe src="about:blank" id="dummyFrame1"></iframe>
+            <iframe src="about:blank" id="dummyFrame2"></iframe>
         </div>
     </div>
 
     <script>
-        // ============================================
-        // ЗАЩИТНЫЕ МЕХАНИЗМЫ
-        // ============================================
-
-        // 1. Блокировка правого клика
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            showContextMenuBlocker();
-            return false;
-        });
-
-        // 2. Блокировка клавиш
-        document.addEventListener('keydown', function(e) {
-            // Блокировка F12, Ctrl+Shift+I, Ctrl+U и т.д.
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-                (e.ctrlKey && e.key === 'U') ||
-                (e.metaKey && e.altKey && e.key === 'I')
-            ) {
+        // Глобальная блокировка
+        (function() {
+            // Блокируем контекстное меню
+            document.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
                 return false;
-            }
-        });
-
-        // 3. Блокировка перетаскивания
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        // 4. Запрет выделения текста
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        // 5. Блокировка просмотра исходного кода
-        document.onkeydown = function(e) {
-            if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
+            });
+            
+            // Блокируем выделение текста
+            document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
                 return false;
-            }
-        };
+            });
+            
+            // Блокируем перетаскивание
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Блокируем копирование
+            document.addEventListener('copy', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Блокируем клавиши для копирования
+            document.addEventListener('keydown', function(e) {
+                // Ctrl+C, Ctrl+V, Ctrl+A, Ctrl+U, F12, Ctrl+Shift+I
+                if (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'a' || e.key === 'u')) {
+                    e.preventDefault();
+                    return false;
+                }
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        })();
 
-        // ============================================
-        // ФУНКЦИИ ЗАЩИТЫ
-        // ============================================
-
-        // Временное отображение блокировщика контекстного меню
-        function showContextMenuBlocker() {
-            const blocker = document.getElementById('contextBlocker');
-            blocker.style.display = 'block';
+        // Функция для загрузки видео через прокси
+        function loadVideoSecurely() {
+            const videoFrame = document.getElementById('videoFrame');
+            
+            // 1. Маскируем оригинальный URL
+            const originalUrl = 'https://vk.com/video_ext.php?oid=-169051052&id=456239019';
+            
+            // 2. Создаем зашифрованную ссылку (базовое кодирование)
+            const encodedUrl = btoa(originalUrl).split('').reverse().join('');
+            
+            // 3. Загружаем через промежуточный обработчик
             setTimeout(() => {
-                blocker.style.display = 'none';
+                // В реальном проекте здесь был бы серверный прокси
+                // Но для демо используем оригинальный URL с защитой
+                videoFrame.src = originalUrl;
+                
+                // 4. Скрываем оригинальный URL в iframe
+                videoFrame.onload = function() {
+                    hideLoader();
+                    
+                    // Дополнительная защита: перехватываем события навигации
+                    try {
+                        // Пытаемся заблокировать навигацию внутри iframe
+                        const iframeWindow = videoFrame.contentWindow;
+                        if (iframeWindow) {
+                            // Подменяем функцию открытия ссылок
+                            iframeWindow.open = function() {
+                                return null;
+                            };
+                            
+                            // Блокируем переходы по ссылкам
+                            iframeWindow.addEventListener('beforeunload', function(e) {
+                                e.preventDefault();
+                                e.returnValue = '';
+                                return '';
+                            });
+                        }
+                    } catch (e) {
+                        // Игнорируем ошибки кросс-доменной политики
+                    }
+                };
             }, 500);
         }
 
-        // ============================================
-        // ЗАГРУЗКА ВИДЕО
-        // ============================================
-
-        // Параметры видео (закодированные)
-        const videoConfig = {
-            // Закодированные параметры видео
-            // Можно менять на свои значения
-            o: '169051052',  // ownerId
-            i: '456239019',  // videoId
-            h: 'a1b2c3d4e5'  // hash (примерный)
-        };
-
-        // Функция создания защищенного iframe
-        function createProtectedIframe() {
-            const placeholder = document.getElementById('videoPlaceholder');
-            
-            // Очищаем placeholder
-            placeholder.innerHTML = '';
-            
-            // Создаем iframe с обфусцированным src
-            const iframe = document.createElement('iframe');
-            
-            // Собираем URL с закодированными параметрами
-            const videoUrl = `https://vk.com/video_ext.php?oid=-${videoConfig.o}&id=${videoConfig.i}&hash=${videoConfig.h}`;
-            
-            // Устанавливаем атрибуты
-            iframe.setAttribute('src', videoUrl);
-            iframe.setAttribute('frameborder', '0');
-            iframe.setAttribute('allowfullscreen', '');
-            iframe.setAttribute('allow', 'encrypted-media; picture-in-picture');
-            
-            // Стилизация
-            iframe.style.cssText = `
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                border: none;
-            `;
-            
-            // Добавляем iframe в DOM
-            placeholder.appendChild(iframe);
-            
-            // Запускаем защитные механизмы для iframe
-            setupIframeProtection(iframe);
-            
-            return iframe;
+        // Скрываем индикатор загрузки
+        function hideLoader() {
+            const loader = document.getElementById('loadingIndicator');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 300);
+            }
         }
 
-        // Настройка защиты для iframe
-        function setupIframeProtection(iframe) {
-            // Периодически проверяем и очищаем title iframe
+        // Защита от извлечения iframe
+        function protectIframe() {
+            const videoFrame = document.getElementById('videoFrame');
+            
+            // Регулярно меняем ID iframe
+            let frameCounter = 0;
             setInterval(() => {
-                try {
-                    iframe.title = 'Video Player';
-                } catch(e) {
-                    // Игнорируем ошибки доступа
+                frameCounter++;
+                const newId = 'vidFrame_' + Date.now() + '_' + frameCounter;
+                videoFrame.id = newId;
+            }, 30000); // Меняем каждые 30 секунд
+            
+            // Блокируем доступ к свойствам iframe
+            Object.defineProperty(videoFrame, 'src', {
+                configurable: false,
+                writable: true,
+                enumerable: false // Скрываем от перечисления
+            });
+            
+            // Маскируем реальный src
+            videoFrame.setAttribute('data-real-src', '');
+            videoFrame.removeAttribute('src');
+            
+            // Загружаем видео только после взаимодействия
+            const playOverlay = document.createElement('div');
+            playOverlay.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 80px;
+                height: 80px;
+                background: rgba(0, 0, 0, 0.8);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                z-index: 100;
+                transition: all 0.3s;
+            `;
+            playOverlay.innerHTML = `
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            `;
+            
+            playOverlay.onclick = function() {
+                this.style.opacity = '0';
+                setTimeout(() => {
+                    this.style.display = 'none';
+                    // Только после клика загружаем видео
+                    loadVideoSecurely();
+                }, 300);
+            };
+            
+            const videoContainer = document.querySelector('.video-container');
+            if (videoContainer) {
+                videoContainer.appendChild(playOverlay);
+            }
+        }
+
+        // Инициализация защиты
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем фон если нужно
+            const urlParams = new URLSearchParams(window.location.search);
+            const bgUrl = urlParams.get('bg');
+            if (bgUrl) {
+                document.body.style.background = `url('${bgUrl}') center/cover no-repeat`;
+            }
+            
+            // Инициализируем защиту iframe
+            protectIframe();
+            
+            // Защита от DevTools
+            setInterval(function() {
+                // Проверяем, открыты ли DevTools
+                const widthThreshold = window.outerWidth - window.innerWidth > 160;
+                const heightThreshold = window.outerHeight - window.innerHeight > 160;
+                
+                if (widthThreshold || heightThreshold) {
+                    // Можно добавить действия при обнаружении DevTools
+                    // Например, очистка iframe
+                    document.getElementById('videoFrame').src = 'about:blank';
                 }
             }, 1000);
             
-            // Блокируем некоторые события на iframe
-            iframe.addEventListener('load', function() {
-                try {
-                    // Пытаемся скрыть элементы управления VK внутри iframe
-                    // (это работает не всегда из-за политики CORS)
-                    setTimeout(() => {
-                        try {
-                            // Очищаем историю навигации iframe
-                            iframe.contentWindow.location.replace('about:blank');
-                        } catch(e) {
-                            // Игнорируем ошибки CORS
-                        }
-                    }, 100);
-                } catch(e) {
-                    // Игнорируем ошибки доступа
-                }
+            // Блокируем вынос iframe
+            document.getElementById('protectionOverlay').addEventListener('click', function(e) {
+                e.stopPropagation();
+                return false;
             });
-        }
-
-        // ============================================
-        // УПРАВЛЕНИЕ ВОСПРОИЗВЕДЕНИЕМ
-        // ============================================
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const playOverlay = document.getElementById('playOverlay');
-            const iframeBlocker = document.getElementById('iframeBlocker');
-            
-            // Создаем iframe только после клика
-            playOverlay.addEventListener('click', function() {
-                // Скрываем оверлей
-                playOverlay.classList.add('hidden');
-                
-                // Создаем iframe с видео
-                const iframe = createProtectedIframe();
-                
-                // Активируем блокировщик для iframe
-                setTimeout(() => {
-                    iframeBlocker.style.display = 'block';
-                    
-                    // Блокируем клики по iframe через 1 секунду
-                    setTimeout(() => {
-                        iframeBlocker.style.display = 'none';
-                    }, 1000);
-                }, 500);
-            });
-            
-            // ============================================
-            // ДОПОЛНИТЕЛЬНАЯ ЗАЩИТА
-            // ============================================
-            
-            // Запрещаем открытие новых окон/вкладок
-            window.open = function() {
-                return null;
-            };
-            
-            // Запрещаем изменение location
-            Object.defineProperty(window, 'location', {
-                value: {
-                    replace: function() {},
-                    assign: function() {},
-                    href: 'about:blank'
-                },
-                writable: false
-            });
-            
-            // Маскируем реальный URL видео в iframe
-            const originalCreateElement = document.createElement;
-            document.createElement = function(tagName) {
-                const element = originalCreateElement.call(this, tagName);
-                if (tagName.toLowerCase() === 'iframe') {
-                    // Добавляем защиту для всех создаваемых iframe
-                    setTimeout(() => {
-                        if (element.src && element.src.includes('vk.com')) {
-                            // Периодически меняем title
-                            setInterval(() => {
-                                element.title = 'Video Content';
-                            }, 2000);
-                        }
-                    }, 100);
-                }
-                return element;
-            };
         });
 
-        // ============================================
-        // ОБРАБОТКА ОШИБОК
-        // ============================================
-
-        // Перехватываем ошибки загрузки
-        window.addEventListener('error', function(e) {
-            // Подавляем вывод ошибок в консоль
-            e.preventDefault();
-            return true;
-        }, true);
-
-        // Перехватываем unhandled rejections
-        window.addEventListener('unhandledrejection', function(e) {
-            e.preventDefault();
-            return true;
-        });
-
-        // ============================================
-        // ФОН СТРАНИЦЫ
-        // ============================================
-
-        // Функция для установки фона (опционально)
-        function setBackgroundImage(imageUrl) {
-            document.body.style.background = `url('${imageUrl}') center/cover no-repeat fixed`;
-        }
+        // Запрещаем открытие в новом окне
+        window.open = function() {
+            return null;
+        };
         
-        // Загружаем фон из URL параметра (если нужно)
-        function loadBackgroundFromURL() {
-            try {
-                const urlParams = new URLSearchParams(window.location.search);
-                const bgUrl = urlParams.get('bg');
-                if (bgUrl) {
-                    setBackgroundImage(bgUrl);
-                }
-            } catch(e) {
-                // Игнорируем ошибки
-            }
-        }
-        
-        // Вызываем при загрузке
-        loadBackgroundFromURL();
+        // Блокируем закрытие страницы (опционально)
+        window.onbeforeunload = function() {
+            return "Вы уверены, что хотите покинуть страницу?";
+        };
     </script>
 </body>
 </html>
