@@ -1,18 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Мое видео</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мое видео по QR-коду</title>
     <style>
-        body { margin: 0; padding: 20px; background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        video { max-width: 100%; max-height: 90vh; border-radius: 10px; }
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .video-container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        video {
+            width: 100%;
+            display: block;
+        }
+        .info {
+            padding: 25px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin: 0 0 15px 0;
+            font-size: 28px;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .qr-hint {
+            margin-top: 30px;
+            color: white;
+            text-align: center;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
-    <!-- Вставьте вашу ссылку из п.1 в атрибут src -->
-    <video controls autoplay playsinline>
-        <source src="https://disk.yandex.ru/i/dolMFLtTNhoqsg" type="video/mp4">
-        Ваш браузер не поддерживает видео.
-    </video>
+    <div class="video-container">
+        <!-- ВСТАВЬТЕ ССЫЛКУ НА ВАШЕ ВИДЕО ВНИЗУ -->
+        <video controls playsinline poster="https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+            <!-- Пример видео. ЗАМЕНИТЕ src НА ВАШЕ ВИДЕО! -->
+            <source src="https://disk.yandex.ru/i/dolMFLtTNhoqsg" type="video/mp4">
+            Ваш браузер не поддерживает воспроизведение видео.
+        </video>
+        <div class="info">
+            <h1>Привет! Вы отсканировали QR-код</h1>
+            <p>Это специальный контент, доступный только по QR-коду. Надеемся, вам понравится видео!</p>
+        </div>
+    </div>
+    <div class="qr-hint">
+        Страница оптимизирована для просмотра с мобильных устройств
+    </div>
+    
+    <script>
+        // Автозапуск видео на мобильных устройствах (только для iOS/Android)
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.querySelector('video');
+            // Пытаемся запустить видео автоматически (работает не на всех устройствах)
+            video.play().catch(function(error) {
+                console.log("Автовоспроизведение не удалось, требуется взаимодействие пользователя");
+            });
+        });
+    </script>
 </body>
 </html>
