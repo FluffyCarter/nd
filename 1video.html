@@ -14,7 +14,17 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            
+            /* 1. ЗДЕСЬ УСТАНАВЛИВАЕТСЯ ФОНОВАЯ КАРТИНКА */
+            /* Чтобы добавить свою картинку, замените url() на путь к вашему изображению */
+            /* Пример 1: background: url('https://example.com/your-image.jpg') center/cover; */
+            /* Пример 2: background: url('images/background.jpg') center/cover; */
+            
+            /* 2. ТЕКУЩИЙ ФОН - ЧЕРНЫЙ ГРАДИЕНТ (замените на свой) */
+            background: #000; /* Простой черный фон по умолчанию */
+            /* background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); /* Пример градиента */
+            /* background: url('your-image.jpg') center/cover no-repeat; /* Раскомментируйте для своей картинки */
+            
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -25,10 +35,34 @@
             overflow-x: hidden;
         }
 
+        /* 3. ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ ФОНА С КАРТИНКОЙ */
+        /* Если используете картинку, можете добавить: */
+        /*
+        body.with-background-image {
+            background-attachment: fixed; /* Фиксированный фон */
+            background-size: cover; /* Картинка покрывает весь экран */
+            background-position: center; /* Центрирование картинки */
+            background-repeat: no-repeat; /* Без повторения */
+        }
+        */
+
+        /* Затемнение фона для лучшей читаемости текста */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Полупрозрачный черный оверлей */
+            z-index: -1; /* Помещаем под контент */
+        }
+
         .container {
             width: 100%;
             max-width: 1200px;
             text-align: center;
+            z-index: 1; /* Чтобы контент был над затемнением */
         }
 
         .header {
@@ -39,18 +73,17 @@
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 10px;
-            background: linear-gradient(90deg, #00dbde, #fc00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            color: #fff; /* Простой белый цвет вместо градиента */
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
         }
 
         .header p {
             font-size: 1.1rem;
-            opacity: 0.8;
+            opacity: 0.9;
             max-width: 600px;
             margin: 0 auto;
             line-height: 1.5;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
         }
 
         .video-wrapper {
@@ -58,15 +91,10 @@
             width: 100%;
             max-width: 900px;
             margin: 0 auto;
-            border-radius: 20px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             background: #000;
-            transition: transform 0.3s ease;
-        }
-
-        .video-wrapper:hover {
-            transform: translateY(-5px);
         }
 
         .video-container {
@@ -94,56 +122,22 @@
             transform: translate(-50%, -50%);
             font-size: 1.2rem;
             color: rgba(255, 255, 255, 0.7);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 25px;
+            border-radius: 10px;
         }
 
         /* Информационная панель */
         .info-panel {
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 25px;
+            padding: 15px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            max-width: 600px;
+            border-radius: 10px;
+            max-width: 500px;
             margin-left: auto;
             margin-right: auto;
-        }
-
-        .info-panel h3 {
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        .info-panel p {
-            line-height: 1.6;
-            opacity: 0.9;
-        }
-
-        /* Кнопки управления */
-        .controls {
-            margin-top: 20px;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            background: linear-gradient(90deg, #00dbde, #fc00ff);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            font-size: 0.95rem;
         }
 
         /* Адаптивность для мобильных */
@@ -161,23 +155,12 @@
             }
             
             .video-wrapper {
-                border-radius: 15px;
+                border-radius: 10px;
             }
             
             .info-panel {
-                padding: 15px;
-            }
-            
-            .btn {
-                padding: 10px 20px;
+                padding: 12px;
                 font-size: 0.9rem;
-                width: 100%;
-                text-align: center;
-            }
-            
-            .controls {
-                flex-direction: column;
-                gap: 10px;
             }
         }
 
@@ -191,7 +174,11 @@
             }
             
             .video-wrapper {
-                border-radius: 10px;
+                border-radius: 8px;
+            }
+            
+            .info-panel {
+                margin-top: 20px;
             }
         }
 
@@ -211,21 +198,12 @@
             animation: fadeIn 0.8s ease-out;
         }
 
-        /* Прогресс-бар */
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            margin-top: 10px;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .progress {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #00dbde, #fc00ff);
-            transition: width 0.3s ease;
+        /* Стиль для инструкций */
+        .instructions {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-style: italic;
         }
     </style>
 </head>
@@ -233,7 +211,7 @@
     <div class="container">
         <div class="header">
             <h1>Видео из VK</h1>
-            <p>Смотрите видео прямо на странице. Для лучшего опыта используйте полноэкранный режим.</p>
+            <p>Нажмите на видео для начала воспроизведения</p>
         </div>
         
         <div class="video-wrapper">
@@ -244,34 +222,28 @@
                 </div>
                 
                 <!-- Видео с VK -->
+                <!-- 4. УБРАН ПАРАМЕТР autoplay=1, чтобы видео начиналось с паузы -->
                 <iframe 
-                    src="https://vk.com/video_ext.php?oid=-169051052&id=456239019&autoplay=1" 
-                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" 
+                    src="https://vk.com/video_ext.php?oid=-169051052&id=456239019" 
+                    allow="encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" 
                     frameborder="0" 
                     allowfullscreen
                     onload="hideLoader()"
                     id="videoFrame">
                 </iframe>
             </div>
-            
-            <!-- Прогресс-бар -->
-            <div class="progress-bar">
-                <div class="progress" id="progressBar"></div>
-            </div>
-        </div>
-        
-        <div class="controls">
-            <button class="btn" onclick="toggleFullscreen()">Полный экран</button>
-            <button class="btn" onclick="reloadVideo()">Перезагрузить видео</button>
-            <a href="https://vk.com/video-169051052_456239019" class="btn" target="_blank">Открыть в VK</a>
         </div>
         
         <div class="info-panel">
-            <h3>Как управлять видео:</h3>
-            <p>• Нажмите на видео для паузы/воспроизведения<br>
-               • Используйте кнопки на панели управления<br>
-               • Для выхода из полноэкранного режима нажмите Esc<br>
-               • На мобильных устройствах поверните экран для лучшего просмотра</p>
+            <p><strong>Как управлять видео:</strong><br>
+            • Нажмите на видео для воспроизведения<br>
+            • Для паузы нажмите на видео еще раз<br>
+            • На мобильных устройствах поверните экран для лучшего просмотра</p>
+        </div>
+        
+        <div class="instructions">
+            <!-- 5. ИНСТРУКЦИЯ ПО СМЕНЕ ФОНА -->
+            Чтобы сменить фон страницы, отредактируйте CSS свойство "background" в теге &lt;style&gt;
         </div>
     </div>
 
@@ -279,84 +251,99 @@
         // Скрываем индикатор загрузки когда видео загрузилось
         function hideLoader() {
             const loader = document.getElementById('loadingIndicator');
-            const progressBar = document.getElementById('progressBar');
             if (loader) {
                 loader.style.opacity = '0';
                 setTimeout(() => {
                     loader.style.display = 'none';
                 }, 300);
             }
-            if (progressBar) {
-                progressBar.style.width = '100%';
-            }
         }
 
-        // Функция для переключения полноэкранного режима
-        function toggleFullscreen() {
-            const iframe = document.getElementById('videoFrame');
-            if (!document.fullscreenElement) {
-                if (iframe.requestFullscreen) {
-                    iframe.requestFullscreen();
-                } else if (iframe.webkitRequestFullscreen) {
-                    iframe.webkitRequestFullscreen();
-                } else if (iframe.msRequestFullscreen) {
-                    iframe.msRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-            }
-        }
-
-        // Функция для перезагрузки видео
-        function reloadVideo() {
-            const iframe = document.getElementById('videoFrame');
-            const loader = document.getElementById('loadingIndicator');
-            const progressBar = document.getElementById('progressBar');
+        // 6. ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ ФОНА ИЗ URL ПАРАМЕТРА
+        // Пример: yourpage.html?bg=https://example.com/image.jpg
+        function loadBackgroundFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bgUrl = urlParams.get('bg');
             
-            // Показываем индикатор загрузки
-            if (loader) {
-                loader.style.display = 'block';
-                loader.style.opacity = '1';
+            if (bgUrl) {
+                // Устанавливаем фоновую картинку из параметра URL
+                document.body.style.background = `url('${bgUrl}') center/cover no-repeat`;
+                console.log('Фон загружен из URL:', bgUrl);
             }
-            if (progressBar) {
-                progressBar.style.width = '0%';
+        }
+
+        // 7. ФУНКЦИЯ ДЛЯ ДИНАМИЧЕСКОЙ СМЕНЫ ФОНА (опционально)
+        function setBackgroundImage(imageUrl) {
+            // Устанавливаем фоновую картинку
+            document.body.style.background = `url('${imageUrl}') center/cover no-repeat`;
+            console.log('Фон изменен на:', imageUrl);
+            
+            // Сохраняем в localStorage для запоминания
+            if (typeof(Storage) !== "undefined") {
+                localStorage.setItem('videoPageBackground', imageUrl);
+            }
+        }
+
+        // Загружаем сохраненный фон из localStorage при загрузке
+        window.addEventListener('DOMContentLoaded', function() {
+            // Проверяем параметр URL для фона
+            loadBackgroundFromURL();
+            
+            // Проверяем сохраненный фон в localStorage
+            if (typeof(Storage) !== "undefined") {
+                const savedBg = localStorage.getItem('videoPageBackground');
+                if (savedBg && !window.location.search.includes('bg=')) {
+                    document.body.style.background = `url('${savedBg}') center/cover no-repeat`;
+                }
             }
             
-            // Перезагружаем iframe
-            iframe.src = iframe.src;
-        }
-
-        // Автоматический прогресс-бар при загрузке
-        window.addEventListener('load', function() {
-            const progressBar = document.getElementById('progressBar');
-            if (progressBar) {
-                let width = 0;
-                const interval = setInterval(() => {
-                    if (width >= 90) {
-                        clearInterval(interval);
-                    } else {
-                        width += 10;
-                        progressBar.style.width = width + '%';
+            // 8. ВИДЕО НАЧИНАЕТСЯ С ПАУЗЫ - нет автозапуска
+            // Для VK видео обычно начинается с паузы по умолчанию, когда нет autoplay=1
+            
+            // Добавляем обработчик клика по видео для ручного запуска
+            const videoFrame = document.getElementById('videoFrame');
+            if (videoFrame) {
+                // Добавляем оверлей с иконкой play для наглядности
+                const playOverlay = document.createElement('div');
+                playOverlay.style.cssText = `
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 80px;
+                    height: 80px;
+                    background: rgba(0, 0, 0, 0.7);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    z-index: 10;
+                    transition: transform 0.3s;
+                `;
+                playOverlay.innerHTML = `
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                `;
+                
+                playOverlay.onclick = function() {
+                    // При клике на оверлей можно перезагрузить iframe с autoplay
+                    // или использовать другие методы управления видео
+                    this.style.display = 'none';
+                    // Перезагружаем iframe с параметром autoplay
+                    const currentSrc = videoFrame.src;
+                    if (!currentSrc.includes('autoplay=1')) {
+                        videoFrame.src = currentSrc + (currentSrc.includes('?') ? '&' : '?') + 'autoplay=1';
                     }
-                }, 100);
+                };
+                
+                const videoContainer = document.querySelector('.video-container');
+                if (videoContainer) {
+                    videoContainer.appendChild(playOverlay);
+                }
             }
         });
-
-        // Добавляем обработчик для выхода из полноэкранного режима по Esc
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-        document.addEventListener('msfullscreenchange', handleFullscreenChange);
-
-        function handleFullscreenChange() {
-            const iframe = document.getElementById('videoFrame');
-            // Можно добавить дополнительную логику при изменении режима
-        }
 
         // Оптимизация для мобильных устройств
         function checkOrientation() {
