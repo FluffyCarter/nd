@@ -1,80 +1,17 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мое видео по QR-коду</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .video-container {
-            max-width: 800px;
-            width: 100%;
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-        video {
-            width: 100%;
-            display: block;
-        }
-        .info {
-            padding: 25px;
-            text-align: center;
-        }
-        h1 {
-            color: #333;
-            margin: 0 0 15px 0;
-            font-size: 28px;
-        }
-        p {
-            color: #666;
-            line-height: 1.6;
-            margin: 0;
-        }
-        .qr-hint {
-            margin-top: 30px;
-            color: white;
-            text-align: center;
-            font-size: 14px;
-        }
-    </style>
+    <title>Видео с VK</title>
 </head>
 <body>
-    <div class="video-container">
-        <!-- ВСТАВЬТЕ ССЫЛКУ НА ВАШЕ ВИДЕО ВНИЗУ -->
-        <video controls playsinline poster="https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
-            <!-- Пример видео. ЗАМЕНИТЕ src НА ВАШЕ ВИДЕО! -->
-            <source src="https://disk.yandex.ru/i/dolMFLtTNhoqsg" type="video/mp4">
-            Ваш браузер не поддерживает воспроизведение видео.
-        </video>
-        <div class="info">
-            <h1>Привет! Вы отсканировали QR-код</h1>
-            <p>Это специальный контент, доступный только по QR-коду. Надеемся, вам понравится видео!</p>
-        </div>
-    </div>
-    <div class="qr-hint">
-        Страница оптимизирована для просмотра с мобильных устройств
-    </div>
+    <!-- Сюда вставьте код, скопированный из VK -->
+    <!-- Пример кода от VK: -->
+    <iframe src="https://vk.com/video_ext.php?oid=-169051052&id=456239019&autoplay=1" width="640" height="360" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" frameborder="0" allowfullscreen></iframe>
     
     <script>
-        // Автозапуск видео на мобильных устройствах (только для iOS/Android)
+        // Автоматический запуск при загрузке
         document.addEventListener('DOMContentLoaded', function() {
-            const video = document.querySelector('video');
-            // Пытаемся запустить видео автоматически (работает не на всех устройствах)
-            video.play().catch(function(error) {
-                console.log("Автовоспроизведение не удалось, требуется взаимодействие пользователя");
-            });
+            // Можно добавить дополнительные скрипты
         });
     </script>
 </body>
