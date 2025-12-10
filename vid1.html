@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Аудио-Загадка</title>
+    <style>
+        /* Сброс стилей */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            
+            /* 1. ЗДЕСЬ УСТАНАВЛИВАЕТСЯ ФОНОВАЯ КАРТИНКА */
+            /* Чтобы добавить свою картинку, замените url() на путь к вашему изображению */
+            /* Пример 1: background: url('https://example.com/your-image.jpg') center/cover; */
+            /* Пример 2: background: url('images/background.jpg') center/cover; */
+            
+            /* 2. ТЕКУЩИЙ ФОН - ЧЕРНЫЙ ГРАДИЕНТ (замените на свой) */
+            background: #000; /* Простой черный фон по умолчанию */
+            /* background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); /* Пример градиента */
+            /* background: url('your-image.jpg') center/cover no-repeat; /* Раскомментируйте для своей картинки */
+            
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* 3. ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ ФОНА С КАРТИНКОЙ */
+        /* Если используете картинку, можете добавить: */
+        /*
+        body.with-background-image {
+            background-attachment: fixed; /* Фиксированный фон */
+            background-size: cover; /* Картинка покрывает весь экран */
+            background-position: center; /* Центрирование картинки */
+            background-repeat: no-repeat; /* Без повторения */
+        }
+        */
+
+        /* Затемнение фона для лучшей читаемости текста */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Полупрозрачный черный оверлей */
+            z-index: -1; /* Помещаем под контент */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+            z-index: 1; /* Чтобы контент был над затемнением */
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff; /* Простой белый цвет вместо градиента */
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            background: #000;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 соотношение сторон */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #000;
+        }
+
+        /* Стили для статуса загрузки */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 25px;
+            border-radius: 10px;
+        }
+
+        /* Информационная панель */
+        .info-panel {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 0.95rem;
+        }
+
+        /* Адаптивность для мобильных */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .video-wrapper {
+                border-radius: 10px;
+            }
+            
+            .info-panel {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .header p {
+                font-size: 0.9rem;
+            }
+            
+            .video-wrapper {
+                border-radius: 8px;
+            }
+            
+            .info-panel {
+                margin-top: 20px;
+            }
+        }
+
+        /* Анимация появления */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Стиль для инструкций */
+        .instructions {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1></h1>
+            <p>Нажмите на аудио для начала воспроизведения</p>
+        </div>
+        
+        <div class="video-wrapper">
+            <div class="video-container">
+                <!-- Индикатор загрузки -->
+                <div class="loading" id="loadingIndicator">
+                    Загрузка видео...
+                </div>
+                
+                <!-- Видео с VK -->
+                <!-- 4. УБРАН ПАРАМЕТР autoplay=1, чтобы видео начиналось с паузы -->
+                <iframe src="https://vk.com/video_ext.php?oid=-169051052&id=456239020&hash=9cd7207fb4a0f6ac" width="853" height="480" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <p><strong>🐈‍⬛</strong><br>
+            Что за место зашифровано на этом аудио?<br>
+        </div>
+    </div>
+
+    <script>
+        // Скрываем индикатор загрузки когда видео загрузилось
+        function hideLoader() {
+            const loader = document.getElementById('loadingIndicator');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        // 6. ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ ФОНА ИЗ URL ПАРАМЕТРА
+        // Пример: yourpage.html?bg=https://example.com/image.jpg
+        function loadBackgroundFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bgUrl = urlParams.get('bg');
+            
+            if (bgUrl) {
+                // Устанавливаем фоновую картинку из параметра URL
+                document.body.style.background = `url('${bgUrl}') center/cover no-repeat`;
+                console.log('Фон загружен из URL:', bgUrl);
+            }
+        }
+
+        // 7. ФУНКЦИЯ ДЛЯ ДИНАМИЧЕСКОЙ СМЕНЫ ФОНА (опционально)
+        function setBackgroundImage(imageUrl) {
+            // Устанавливаем фоновую картинку
+            document.body.style.background = `url('${imageUrl}') center/cover no-repeat`;
+            console.log('Фон изменен на:', imageUrl);
+            
+            // Сохраняем в localStorage для запоминания
+            if (typeof(Storage) !== "undefined") {
+                localStorage.setItem('videoPageBackground', imageUrl);
+            }
+        }
+
+        // Загружаем сохраненный фон из localStorage при загрузке
+        window.addEventListener('DOMContentLoaded', function() {
+            // Проверяем параметр URL для фона
+            loadBackgroundFromURL();
+            
+            // Проверяем сохраненный фон в localStorage
+            if (typeof(Storage) !== "undefined") {
+                const savedBg = localStorage.getItem('videoPageBackground');
+                if (savedBg && !window.location.search.includes('bg=')) {
+                    document.body.style.background = `url('${savedBg}') center/cover no-repeat`;
+                }
+            }
+            
+            // 8. ВИДЕО НАЧИНАЕТСЯ С ПАУЗЫ - нет автозапуска
+            // Для VK видео обычно начинается с паузы по умолчанию, когда нет autoplay=1
+            
+            // Добавляем обработчик клика по видео для ручного запуска
+            const videoFrame = document.getElementById('videoFrame');
+            if (videoFrame) {
+                // Добавляем оверлей с иконкой play для наглядности
+                const playOverlay = document.createElement('div');
+                playOverlay.style.cssText = `
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 80px;
+                    height: 80px;
+                    background: rgba(0, 0, 0, 0.7);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    z-index: 10;
+                    transition: transform 0.3s;
+                `;
+                playOverlay.innerHTML = `
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                `;
+                
+                playOverlay.onclick = function() {
+                    // При клике на оверлей можно перезагрузить iframe с autoplay
+                    // или использовать другие методы управления видео
+                    this.style.display = 'none';
+                    // Перезагружаем iframe с параметром autoplay
+                    const currentSrc = videoFrame.src;
+                    if (!currentSrc.includes('autoplay=1')) {
+                        videoFrame.src = currentSrc + (currentSrc.includes('?') ? '&' : '?') + 'autoplay=1';
+                    }
+                };
+                
+                const videoContainer = document.querySelector('.video-container');
+                if (videoContainer) {
+                    videoContainer.appendChild(playOverlay);
+                }
+            }
+        });
+
+        // Оптимизация для мобильных устройств
+        function checkOrientation() {
+            if (window.innerHeight > window.innerWidth) {
+                // Портретная ориентация
+                document.body.classList.add('portrait');
+            } else {
+                // Ландшафтная ориентация
+                document.body.classList.remove('portrait');
+            }
+        }
+
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', checkOrientation);
+        
+        // Проверяем при загрузке
+        checkOrientation();
+    </script>
+</body>
+</html>
