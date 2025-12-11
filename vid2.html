@@ -14,17 +14,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            
-            /* 1. ЗДЕСЬ УСТАНАВЛИВАЕТСЯ ФОНОВАЯ КАРТИНКА */
-            /* Чтобы добавить свою картинку, замените url() на путь к вашему изображению */
-            /* Пример 1: background: url('https://example.com/your-image.jpg') center/cover; */
-            /* Пример 2: background: url('images/background.jpg') center/cover; */
-            
-            /* 2. ТЕКУЩИЙ ФОН - ЧЕРНЫЙ ГРАДИЕНТ (замените на свой) */
-            background: #000; /* Простой черный фон по умолчанию */
-            /* background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); /* Пример градиента */
-            /* background: url('your-image.jpg') center/cover no-repeat; /* Раскомментируйте для своей картинки */
-            
+            background: #000;
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -35,17 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* 3. ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ ФОНА С КАРТИНКОЙ */
-        /* Если используете картинку, можете добавить: */
-        /*
-        body.with-background-image {
-            background-attachment: fixed; /* Фиксированный фон */
-            background-size: cover; /* Картинка покрывает весь экран */
-            background-position: center; /* Центрирование картинки */
-            background-repeat: no-repeat; /* Без повторения */
-        }
-        */
-
         /* Затемнение фона для лучшей читаемости текста */
         body::before {
             content: '';
@@ -54,15 +33,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7); /* Полупрозрачный черный оверлей */
-            z-index: -1; /* Помещаем под контент */
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
         }
 
         .container {
             width: 100%;
             max-width: 1200px;
             text-align: center;
-            z-index: 1; /* Чтобы контент был над затемнением */
+            z-index: 1;
         }
 
         .header {
@@ -73,7 +52,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 10px;
-            color: #fff; /* Простой белый цвет вместо градиента */
+            color: #fff;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
         }
 
@@ -114,6 +93,38 @@
             background-color: #000;
         }
 
+        /* Обновленные стили для информационной панели */
+        .info-panel {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 900px; /* Такая же ширина как у видео */
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .info-panel strong {
+            display: block;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-panel p {
+            margin: 0;
+            padding: 0;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
         /* Стили для статуса загрузки */
         .loading {
             position: absolute;
@@ -127,58 +138,94 @@
             border-radius: 10px;
         }
 
-        /* Информационная панель */
-        .info-panel {
-            margin-top: 25px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            font-size: 0.95rem;
-        }
-
         /* Адаптивность для мобильных */
         @media (max-width: 768px) {
             body {
                 padding: 15px;
+                justify-content: flex-start; /* Изменено для мобильных */
+                padding-top: 30px; /* Отступ сверху для мобильных */
+            }
+            
+            .header {
+                margin-bottom: 20px;
             }
             
             .header h1 {
                 font-size: 1.8rem;
+                margin-bottom: 8px;
             }
             
             .header p {
                 font-size: 1rem;
+                margin-bottom: 15px;
             }
             
             .video-wrapper {
                 border-radius: 10px;
+                margin-bottom: 20px; /* Отступ снизу перед инфо-панелью */
             }
             
             .info-panel {
-                padding: 12px;
-                font-size: 0.9rem;
+                margin-top: 20px;
+                padding: 18px 15px;
+                font-size: 1rem;
+                max-width: 100%; /* На мобильных занимает всю ширину */
+                border-radius: 8px;
+                backdrop-filter: blur(8px);
+            }
+            
+            .info-panel strong {
+                font-size: 1.2rem;
+                margin-bottom: 12px;
             }
         }
 
         @media (max-width: 480px) {
+            body {
+                padding: 12px;
+                padding-top: 20px;
+            }
+            
             .header h1 {
                 font-size: 1.5rem;
             }
             
             .header p {
                 font-size: 0.9rem;
+                margin-bottom: 12px;
             }
             
             .video-wrapper {
                 border-radius: 8px;
+                margin-bottom: 15px;
             }
             
             .info-panel {
-                margin-top: 20px;
+                margin-top: 15px;
+                padding: 15px 12px;
+                font-size: 0.95rem;
+                border-radius: 8px;
+            }
+            
+            .info-panel strong {
+                font-size: 1.1rem;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Особые стили для очень маленьких экранов */
+        @media (max-width: 360px) {
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .info-panel {
+                padding: 12px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .info-panel strong {
+                font-size: 1rem;
             }
         }
 
@@ -210,7 +257,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1></h1>
+            <h1>Видео-Загадка</h1>
             <p>Нажмите на видео для начала воспроизведения</p>
         </div>
         
@@ -222,12 +269,23 @@
                 </div>
                 
                 <!-- Видео с VK -->
-                <!-- 4. УБРАН ПАРАМЕТР autoplay=1, чтобы видео начиналось с паузы -->
-                <iframe src="https://vk.com/video_ext.php?oid=-169051052&id=456239021&hash=c2e7af08c709ac97" width="853" height="480" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" frameborder="0" allowfullscreen></iframe>
+                <iframe 
+                    src="https://vk.com/video_ext.php?oid=-169051052&id=456239021&hash=c2e7af08c709ac97" 
+                    width="853" 
+                    height="480" 
+                    style="background-color: #000" 
+                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" 
+                    frameborder="0" 
+                    allowfullscreen
+                    id="videoFrame">
+                </iframe>
+            </div>
+        </div>
         
+        <!-- Информационная панель теперь здесь, под видеороликом -->
         <div class="info-panel">
-            <p><strong></strong><br>
-            Что за место зашифровано на этом видео?<br>
+            <strong>Загадка:</strong>
+            <p>Что за место зашифровано на этом видео?</p>
         </div>
     </div>
 
@@ -243,26 +301,22 @@
             }
         }
 
-        // 6. ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ ФОНА ИЗ URL ПАРАМЕТРА
-        // Пример: yourpage.html?bg=https://example.com/image.jpg
+        // Функция для загрузки фона из URL параметра
         function loadBackgroundFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
             const bgUrl = urlParams.get('bg');
             
             if (bgUrl) {
-                // Устанавливаем фоновую картинку из параметра URL
                 document.body.style.background = `url('${bgUrl}') center/cover no-repeat`;
                 console.log('Фон загружен из URL:', bgUrl);
             }
         }
 
-        // 7. ФУНКЦИЯ ДЛЯ ДИНАМИЧЕСКОЙ СМЕНЫ ФОНА (опционально)
+        // Функция для динамической смены фона
         function setBackgroundImage(imageUrl) {
-            // Устанавливаем фоновую картинку
             document.body.style.background = `url('${imageUrl}') center/cover no-repeat`;
             console.log('Фон изменен на:', imageUrl);
             
-            // Сохраняем в localStorage для запоминания
             if (typeof(Storage) !== "undefined") {
                 localStorage.setItem('videoPageBackground', imageUrl);
             }
@@ -270,10 +324,8 @@
 
         // Загружаем сохраненный фон из localStorage при загрузке
         window.addEventListener('DOMContentLoaded', function() {
-            // Проверяем параметр URL для фона
             loadBackgroundFromURL();
             
-            // Проверяем сохраненный фон в localStorage
             if (typeof(Storage) !== "undefined") {
                 const savedBg = localStorage.getItem('videoPageBackground');
                 if (savedBg && !window.location.search.includes('bg=')) {
@@ -281,8 +333,8 @@
                 }
             }
             
-            // 8. ВИДЕО НАЧИНАЕТСЯ С ПАУЗЫ - нет автозапуска
-            // Для VK видео обычно начинается с паузы по умолчанию, когда нет autoplay=1
+            // Скрываем индикатор загрузки через некоторое время
+            setTimeout(hideLoader, 2000);
             
             // Добавляем обработчик клика по видео для ручного запуска
             const videoFrame = document.getElementById('videoFrame');
@@ -312,10 +364,7 @@
                 `;
                 
                 playOverlay.onclick = function() {
-                    // При клике на оверлей можно перезагрузить iframe с autoplay
-                    // или использовать другие методы управления видео
                     this.style.display = 'none';
-                    // Перезагружаем iframe с параметром autoplay
                     const currentSrc = videoFrame.src;
                     if (!currentSrc.includes('autoplay=1')) {
                         videoFrame.src = currentSrc + (currentSrc.includes('?') ? '&' : '?') + 'autoplay=1';
@@ -332,10 +381,8 @@
         // Оптимизация для мобильных устройств
         function checkOrientation() {
             if (window.innerHeight > window.innerWidth) {
-                // Портретная ориентация
                 document.body.classList.add('portrait');
             } else {
-                // Ландшафтная ориентация
                 document.body.classList.remove('portrait');
             }
         }
@@ -348,6 +395,3 @@
     </script>
 </body>
 </html>
-
-
-
